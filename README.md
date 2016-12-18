@@ -25,4 +25,3 @@ chromium-browser --start-fullscreen index.html
   * `shrink-to-fit` - resize large images to fit the screen (default)
   * `to-fit` - resize all images to fit the screen
   * `stretch` - resize image to fill entire screen (distorts image)
- 
