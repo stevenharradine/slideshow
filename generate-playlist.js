@@ -6,15 +6,15 @@ const file_extentions = [
 	"jpeg"
 ];
 
-var number_of_files = files.length;
-var filtered_files = [];
-var buffered_output = "var images = [";
-
 String.prototype.endsWith = function(suffix) {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
 fs.readdir(testFolder, (err, files) => {
+	var number_of_files = files.length;
+	var filtered_files = [];
+	var buffered_output = "var images = [";
+
 	for (var i = 0; i < number_of_files - 1; i++) {
 		var file = files[i];
 		var number_of_file_extentions = file_extentions.length;
