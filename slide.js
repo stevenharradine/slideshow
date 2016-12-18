@@ -1,4 +1,5 @@
 var delay = getParameterByName("delay") != null ? getParameterByName("delay") : 3000;
+var resize = getParameterByName("resize") != null ? getParameterByName("resize") : "shrink-to-fit";
 
 function slide () {
 	var max_height = window.innerHeight;
@@ -11,14 +12,24 @@ function slide () {
 	image.onload = function () {
 		var style = ""
 
-		// calculate new hight if we scale it by width
-		var calc_height = (max_width * this.height) / this.width;
+		if (resize == "to-fit" || resize == "shrink-to-fit") {
+			// calculate new hight if we scale it by width
+			var calc_height = (max_width * this.height) / this.width;
+			var prefix = "";
 
-		// if the calculated hight would fit within the screen resize based on height
-		if (calc_height >= max_height) {
-			style = "height: 100%;";
-		} else {
-			style = "width: 100%;";
+			if (resize == "shrink-to-fit") {
+				prefix = "max-";
+			}
+
+			// if the calculated hight would fit within the screen resize based on height
+			if (calc_height >= max_height) {
+				style += prefix + "height: 100%;";
+			} else {
+				style += prefix + "width: 100%;";
+			}
+		} else if (resize == "stretch") {
+			style += "height: 100%;";
+			style += "width: 100%;";
 		}
 
 		// apply the sizing
