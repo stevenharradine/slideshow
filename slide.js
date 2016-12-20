@@ -1,8 +1,8 @@
-var delay = getParameterByName("delay") != null ? getParameterByName("delay") : 3000;
-var resize = getParameterByName("resize") != null ? getParameterByName("resize") : "shrink-to-fit";
-var type = getParameterByName("type") != null ? getParameterByName("type") : "linear";
-var transition_duration = getParameterByName("transition_duration") != null ? getParameterByName("transition_duration") : "1";
-var transition_timing_function = getParameterByName("transition_timing_function") != null ? getParameterByName("transition_timing_function") : "ease-in-out";
+var delay = getParameterByName("delay", 3000);
+var resize = getParameterByName("resize", "shrink-to-fit");
+var type = getParameterByName("type", "linear");
+var transition_duration = getParameterByName("transition_duration", "1");
+var transition_timing_function = getParameterByName("transition_timing_function", "ease-in-out");
 var buffered_image = null;
 var current_image_index = 0;
 var modulus_counter = 0;
@@ -72,14 +72,14 @@ function slide () {
 	}, delay);
 }
 
-function getParameterByName(name, url) {
+function getParameterByName(name, default_value, url) {
     if (!url) {
       url = window.location.href;
     }
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
-    if (!results) return null;
+    if (!results) return default_value;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
