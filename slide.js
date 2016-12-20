@@ -1,10 +1,11 @@
 var delay = getParameterByName("delay") != null ? getParameterByName("delay") : 3000;
 var resize = getParameterByName("resize") != null ? getParameterByName("resize") : "shrink-to-fit";
+var buffered_image = null;
 
 function slide () {
 	var max_height = window.innerHeight;
 	var max_width = window.innerWidth;
-	var image_path = images[Math.floor(Math.random() * images.length)];
+	var image_path = buffered_image === null ? images[Math.floor(Math.random() * images.length)] : buffered_image.src;
 	var image = new Image();
 
 	image.name = image_path;
@@ -37,6 +38,10 @@ function slide () {
 
 		// update the image
 		document.getElementById("img").setAttribute ("src", image_path)
+
+		// buffer next image
+		buffered_image = new Image ();
+		buffered_image.src = images[Math.floor(Math.random() * images.length)];
 	}
 
 	setTimeout( function () {
