@@ -1,8 +1,13 @@
 var delay = getParameterByName("delay") != null ? getParameterByName("delay") : 3000;
 var resize = getParameterByName("resize") != null ? getParameterByName("resize") : "shrink-to-fit";
 var type = getParameterByName("type") != null ? getParameterByName("type") : "linear";
+var transition_duration = getParameterByName("transition_duration") != null ? getParameterByName("transition_duration") : "1";
+var transition_timing_function = getParameterByName("transition_timing_function") != null ? getParameterByName("transition_timing_function") : "ease-in-out";
 var buffered_image = null;
 var current_image_index = 0;
+var modulus_counter = 0;
+
+document.write ("<style>img { transition: opacity " + transition_duration + "s " + transition_timing_function + "; }</style>");
 
 function slide () {
 	var max_height = window.innerHeight;
@@ -13,7 +18,7 @@ function slide () {
 	image.name = image_path;
 	image.src = image_path;
 	image.onload = function () {
-		var style = ""
+		var current_image_style = ""
 
 		if (resize == "to-fit" || resize == "shrink-to-fit") {
 			// calculate new hight if we scale it by width
@@ -26,20 +31,26 @@ function slide () {
 
 			// if the calculated hight would fit within the screen resize based on height
 			if (calc_height >= max_height) {
-				style += prefix + "height: 100%;";
+				current_image_style += prefix + "height: 100%;";
 			} else {
-				style += prefix + "width: 100%;";
+				current_image_style += prefix + "width: 100%;";
 			}
 		} else if (resize == "stretch") {
-			style += "height: 100%;";
-			style += "width: 100%;";
+			current_image_style += "height: 100%;";
+			current_image_style += "width: 100%;";
 		}
 
-		// apply the sizing
-		document.getElementById("img").setAttribute("style", style);
+		var current_image_element = document.getElementById("img" + modulus_counter);
+		var next_image_element = document.getElementById("img" + ((modulus_counter + 1) % 2));
+		var next_image_styles_raw = next_image_element.getAttribute ("style");
+		var new_next_image_styles = next_image_styles_raw != null ? next_image_styles_raw.replace("opacity: 100;", "") : "";
+
+		// apply the styles and hide/show current/next images
+		current_image_element.setAttribute("style", current_image_style + " opacity: 100;");
+		next_image_element.setAttribute("style", new_next_image_styles + " opacity: 0;");
 
 		// update the image
-		document.getElementById("img").setAttribute ("src", image_path)
+		current_image_element.setAttribute ("src", image_path)
 
 		if (type == "linear") {
 			// if the next image is beyond the bounds of the playlist rest
@@ -51,6 +62,9 @@ function slide () {
 		// buffer next image
 		buffered_image = new Image ();
 		buffered_image.src = images[current_image_index];
+
+		// increment modulus counter and reset if its a whole number (prevents overflow of long running instances)
+		modulus_counter = modulus_counter++ % 2 == 1 ? 0 : modulus_counter;
 	}
 
 	setTimeout( function () {

@@ -28,3 +28,5 @@ chromium-browser --start-fullscreen index.html
  * `type` (enumeration) -
   * `linear` - cycle through all images in order and repeat
   * `random` - cycle through all images randomly (replacing the selected image back into the pool right away)
+ * `transition_duration` (integer) - how long the animation between images should run in seconds
+ * `transition_timing_function` (enumeration) - the [CSS timing function](https://www.w3.org/TR/css3-transitions/#transition-timing-function) to use for the animation between images 
