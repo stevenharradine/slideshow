@@ -9,6 +9,8 @@ var modulus_counter = 0;
 
 document.write ("<style>img { transition: opacity " + transition_duration + "s " + transition_timing_function + "; }</style>");
 
+setCurrentImage ();
+
 function slide () {
 	var max_height = window.innerHeight;
 	var max_width = window.innerWidth;
@@ -52,12 +54,7 @@ function slide () {
 		// update the image
 		current_image_element.setAttribute ("src", image_path)
 
-		if (type == "linear") {
-			// if the next image is beyond the bounds of the playlist rest
-			current_image_index = ++current_image_index >= images.length ? 0 : current_image_index;
-		} else if (type == "random") {
-			current_image_index = Math.floor(Math.random() * images.length);
-		}
+		setCurrentImage ();
 
 		// buffer next image
 		buffered_image = new Image ();
@@ -82,6 +79,15 @@ function getParameterByName(name, default_value, url) {
     if (!results) return default_value;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function setCurrentImage () {
+	if (type == "linear") {
+		// if the next image is beyond the bounds of the playlist rest
+		current_image_index = ++current_image_index >= images.length ? 0 : current_image_index;
+	} else if (type == "random") {
+		current_image_index = Math.floor(Math.random() * images.length);
+	}
 }
 
 slide();
