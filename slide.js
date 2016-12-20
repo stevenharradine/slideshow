@@ -1,11 +1,13 @@
 var delay = getParameterByName("delay") != null ? getParameterByName("delay") : 3000;
 var resize = getParameterByName("resize") != null ? getParameterByName("resize") : "shrink-to-fit";
+var type = getParameterByName("type") != null ? getParameterByName("type") : "linear";
 var buffered_image = null;
+var current_image_index = 0;
 
 function slide () {
 	var max_height = window.innerHeight;
 	var max_width = window.innerWidth;
-	var image_path = buffered_image === null ? images[Math.floor(Math.random() * images.length)] : buffered_image.src;
+	var image_path = buffered_image === null ? images[current_image_index] : buffered_image.src;
 	var image = new Image();
 
 	image.name = image_path;
@@ -39,9 +41,16 @@ function slide () {
 		// update the image
 		document.getElementById("img").setAttribute ("src", image_path)
 
+		if (type == "linear") {
+			// if the next image is beyond the bounds of the playlist rest
+			current_image_index = ++current_image_index >= images.length ? 0 : current_image_index;
+		} else if (type == "random") {
+			current_image_index = Math.floor(Math.random() * images.length);
+		}
+
 		// buffer next image
 		buffered_image = new Image ();
-		buffered_image.src = images[Math.floor(Math.random() * images.length)];
+		buffered_image.src = images[current_image_index];
 	}
 
 	setTimeout( function () {
